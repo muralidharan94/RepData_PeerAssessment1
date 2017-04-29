@@ -1,19 +1,19 @@
 ---
 title: "Reproducible Research: Peer Assessment 1"
 output: 
-  html_document:
+  html_document: 
     keep_md: true
 ---
 
 
 ## Loading and preprocessing the data
-###Loading the necessary packages
+Loading the necessary packages
 ```{r,echo=TRUE,results='hide'}
 library(ggplot2)
 library(plyr)
 library(Hmisc)
 ```
-###Loading the data
+Loading the data
 ```{r,echo=TRUE}
 activity<-read.csv("activity.csv",na.strings = "NA")
 unique_dates<-unique(activity$date)
@@ -22,9 +22,9 @@ dim(activity)
 
 
 
-## What is mean total number of steps taken per day?
+# What is mean total number of steps taken per day?
 
-###Total number of steps taken per day
+Total number of steps taken per day
 ```{r,echo=TRUE}
 par(margin(4,1,4,1))
 sum_steps<-tapply(X=activity$steps,INDEX=activity$date,FUN=sum,na.rm=TRUE)
@@ -34,12 +34,12 @@ g<-ggplot(total_steps,aes(sum_steps))
 g+geom_histogram(col="red")+theme(axis.text.x = element_text(angle = 90, hjust = 1))+xlab("Steps per day")+ylab("Frequency")+labs(title="Total Steps Per day")
 ```
 
-###Mean number of steps per day is 
+Mean number of steps per day is 
 ```{r,echo=TRUE}
 mean(total_steps$sum_steps,na.rm = TRUE)
 ```
 
-###Median number of steps per day is
+Median number of steps per day is
 
 ```{r,echo=TRUE}
 median(total_steps$sum_steps,na.rm = TRUE)
@@ -48,7 +48,7 @@ median(total_steps$sum_steps,na.rm = TRUE)
 
 ## What is the average daily activity pattern?
 
-###Plot of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis)
+Plot of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis)
 ```{r,echo=TRUE}
 mean_interveal<-tapply(activity$steps,activity$interval,mean,na.rm=TRUE)
 lab1<-names(mean_interveal)
@@ -64,24 +64,24 @@ index<-which.max(mean_time_interveal[,2])
 ti<-mean_time_interveal[index,1]
 st<-mean_time_interveal[index,2]
 ```
-###The time interveal with the maximum number of steps is `r ti` and the number of steps on average are `r st`
+The time interveal with the maximum number of steps is `r ti` and the number of steps on average are `r st`
 
 
-## Imputing missing values
+# Imputing missing values
 
-###Reporting the total number of missing values in the dataset
+Reporting the total number of missing values in the dataset
 ```{r echo=TRUE}
 sum(!complete.cases(activity))
 ```
-###Filling in all of the missing values in the dataset
+Filling in all of the missing values in the dataset
 ```{r echo=TRUE}
 replacement<-aggregate(steps~interval,activity,mean,na.action=na.omit)$steps
 ```
-###Creating a new dataset that is equal to the original dataset but with the missing data filled in.
+Creating a new dataset that is equal to the original dataset but with the missing data filled in.
 ```{r echo=TRUE}
 withNAFilled<-transform(activity,steps=ifelse(is.na(activity$steps),replacement,activity$steps))
 ```
-###Histogram of the total number of steps taken each day
+Histogram of the total number of steps taken each day
 ```{r echo=TRUE}
 sum_filled<-tapply(withNAFilled$steps,withNAFilled$date,sum)
 time_steps_filled<-data.frame(time_inte_fil=unique_dates,steps=sum_filled)
@@ -91,19 +91,19 @@ g2+geom_histogram(col="red")+theme(axis.text.x = element_text(angle = 90, hjust 
 
 ```
 
-###Mean of the total number of steps with missing data filled in
+Mean of the total number of steps with missing data filled in
 ```{r echo=TRUE}
 mean(time_steps_filled$steps)
 ```
-###Median of the total number of steps with missing data filled in
+Median of the total number of steps with missing data filled in
 ```{r echo=TRUE}
 median(time_steps_filled$steps)
 ```
 
-###Values of the mean and median differ significantly with the missing data filled in.Both the mean and median are higher with the missing data filled in.Further,the value of mean and median are same once the missing data is filled.
+Values of the mean and median differ significantly with the missing data filled in.Both the mean and median are higher with the missing data filled in.Further,the value of mean and median are same once the missing data is filled.
 
 
-## Are there differences in activity patterns between weekdays and weekends?
+# Are there differences in activity patterns between weekdays and weekends?
 
 ```{r echo=TRUE}
 withNAFilled$date<-as.Date(as.factor(withNAFilled$date))
@@ -126,7 +126,7 @@ day<-rbind(weekday,weekend)
 day$type<-as.factor(day$type)
 ```
 
-###Time series plot of the 5-minute interval and the average number of steps taken, averaged across all weekday days or weekend days
+Time series plot of the 5-minute interval and the average number of steps taken, averaged across all weekday days or weekend days
 
 ```{r echo=TRUE}
 g2<-ggplot(day,aes(interveal,meansteps))

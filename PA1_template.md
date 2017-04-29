@@ -2,7 +2,7 @@
 
 
 ## Loading and preprocessing the data
-###Loading the necessary packages
+Loading the necessary packages
 
 ```r
 library(ggplot2)
@@ -57,7 +57,7 @@ library(Hmisc)
 ## 
 ##     format.pval, round.POSIXt, trunc.POSIXt, units
 ```
-###Loading the data
+Loading the data
 
 ```r
 activity<-read.csv("activity.csv",na.strings = "NA")
@@ -71,9 +71,9 @@ dim(activity)
 
 
 
-## What is mean total number of steps taken per day?
+# What is mean total number of steps taken per day?
 
-###Total number of steps taken per day
+Total number of steps taken per day
 
 ```r
 par(margin(4,1,4,1))
@@ -97,7 +97,7 @@ g+geom_histogram(col="red")+theme(axis.text.x = element_text(angle = 90, hjust =
 
 ![](PA1_template_files/figure-html/unnamed-chunk-3-1.png)<!-- -->
 
-###Mean number of steps per day is 
+Mean number of steps per day is 
 
 ```r
 mean(total_steps$sum_steps,na.rm = TRUE)
@@ -107,7 +107,7 @@ mean(total_steps$sum_steps,na.rm = TRUE)
 ## [1] 9354.23
 ```
 
-###Median number of steps per day is
+Median number of steps per day is
 
 
 ```r
@@ -121,7 +121,7 @@ median(total_steps$sum_steps,na.rm = TRUE)
 
 ## What is the average daily activity pattern?
 
-###Plot of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis)
+Plot of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis)
 
 ```r
 mean_interveal<-tapply(activity$steps,activity$interval,mean,na.rm=TRUE)
@@ -141,12 +141,12 @@ index<-which.max(mean_time_interveal[,2])
 ti<-mean_time_interveal[index,1]
 st<-mean_time_interveal[index,2]
 ```
-###The time interveal with the maximum number of steps is 835 and the number of steps on average are 206.1698113
+The time interveal with the maximum number of steps is 835 and the number of steps on average are 206.1698113
 
 
-## Imputing missing values
+# Imputing missing values
 
-###Reporting the total number of missing values in the dataset
+Reporting the total number of missing values in the dataset
 
 ```r
 sum(!complete.cases(activity))
@@ -155,17 +155,17 @@ sum(!complete.cases(activity))
 ```
 ## [1] 2304
 ```
-###Filling in all of the missing values in the dataset
+Filling in all of the missing values in the dataset
 
 ```r
 replacement<-aggregate(steps~interval,activity,mean,na.action=na.omit)$steps
 ```
-###Creating a new dataset that is equal to the original dataset but with the missing data filled in.
+Creating a new dataset that is equal to the original dataset but with the missing data filled in.
 
 ```r
 withNAFilled<-transform(activity,steps=ifelse(is.na(activity$steps),replacement,activity$steps))
 ```
-###Histogram of the total number of steps taken each day
+Histogram of the total number of steps taken each day
 
 ```r
 sum_filled<-tapply(withNAFilled$steps,withNAFilled$date,sum)
@@ -181,7 +181,7 @@ g2+geom_histogram(col="red")+theme(axis.text.x = element_text(angle = 90, hjust 
 
 ![](PA1_template_files/figure-html/unnamed-chunk-11-1.png)<!-- -->
 
-###Mean of the total number of steps with missing data filled in
+Mean of the total number of steps with missing data filled in
 
 ```r
 mean(time_steps_filled$steps)
@@ -190,7 +190,7 @@ mean(time_steps_filled$steps)
 ```
 ## [1] 10766.19
 ```
-###Median of the total number of steps with missing data filled in
+Median of the total number of steps with missing data filled in
 
 ```r
 median(time_steps_filled$steps)
@@ -200,10 +200,10 @@ median(time_steps_filled$steps)
 ## [1] 10766.19
 ```
 
-###Values of the mean and median differ significantly with the missing data filled in.Both the mean and median are higher with the missing data filled in.Further,the value of mean and median are same once the missing data is filled.
+Values of the mean and median differ significantly with the missing data filled in.Both the mean and median are higher with the missing data filled in.Further,the value of mean and median are same once the missing data is filled.
 
 
-## Are there differences in activity patterns between weekdays and weekends?
+# Are there differences in activity patterns between weekdays and weekends?
 
 
 ```r
@@ -227,7 +227,7 @@ day<-rbind(weekday,weekend)
 day$type<-as.factor(day$type)
 ```
 
-###Time series plot of the 5-minute interval and the average number of steps taken, averaged across all weekday days or weekend days
+Time series plot of the 5-minute interval and the average number of steps taken, averaged across all weekday days or weekend days
 
 
 ```r
